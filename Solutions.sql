@@ -1,6 +1,7 @@
 USE sakila;
 
 -- I had to do all of it via import wizard. a combination of import wizard and the code below did not work.
+-- only code for the three missing columns
 
 -- In this activity we are going to do some database maintenance. 
 -- In the current database we only have information on movies for the year 2006. 
@@ -33,6 +34,18 @@ FROM films_2020;
 -- For 2020, the rental duration will be 3 days, with an offer price of `2.99€` and a replacement cost of `8.99€`
 	-- (these are all fixed values for all movies for this year). 
 -- The catalog is in a CSV file named **films_2020.csv** that can be found at `files_for_lab` folder.
+
+UPDATE films_2020
+SET rental_duration = 3;
+
+UPDATE films_2020
+SET rental_rate = "2.99";
+
+UPDATE films_2020
+SET replacement_cost = "8.99";
+
+SELECT *
+FROM films_2020;
 
 -- tried this way but it did not work
 -- show global variables like 'local_infile';
