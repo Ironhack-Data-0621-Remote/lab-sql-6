@@ -3,7 +3,7 @@
 -- Now we have received the film catalog for 2020 as well. 
 -- For this new data we will create another table and bulk insert all the data there. 
 -- Code to create a new table has been provided below.
-
+use sakila;
 drop table if exists films_2020;
 CREATE TABLE `films_2020` (
   `film_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
@@ -23,6 +23,8 @@ CREATE TABLE `films_2020` (
 
 
 
+
+
 -- We have just one item for each film, and all will be placed in the new table. 
 -- For 2020, the rental duration will be 3 days, with an offer price of `2.99€` and a replacement cost of `8.99€`
 	-- (these are all fixed values for all movies for this year). 
@@ -30,8 +32,33 @@ CREATE TABLE `films_2020` (
 
 
 -- 1. Add the new films to the database.
+
+
+-- csv added via import wizard
+
+
 -- 2. Update information on `rental_duration`, `rental_rate`, and `replacement_cost`.
-	-- ### Hint
+	
+ UPDATE films_2020
+ SET rental_duration = 3
+ WHERE rental_duration = '';
+ 
+ UPDATE films_2020
+ SET rental_rate = 2.99
+ WHERE rental_rate = '';
+
+ UPDATE films_2020
+ SET replacement_cost = 8.99
+ WHERE replacement_cost = '';
+ 
+ 
+    
+    
+    
+    
+    
+    
+    -- ### Hint
 	-- You might have to use the following commands to set bulk import option to `ON`:
 
 		show variables like 'local_infile';
