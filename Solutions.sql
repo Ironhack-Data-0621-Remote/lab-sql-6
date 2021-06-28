@@ -4,7 +4,13 @@
 -- For this new data we will create another table and bulk insert all the data there. 
 -- Code to create a new table has been provided below.
 
+use sakila;
+
 drop table if exists films_2020;
+
+-- import via wizard was only possible when creating a new table for the import. To get the data in the table provided below I renamed the table created with the import and did a copy-paste of the columns I need
+rename table films_2020 to films_2020_old;
+
 CREATE TABLE `films_2020` (
   `film_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
@@ -21,20 +27,39 @@ CREATE TABLE `films_2020` (
   CONSTRAINT FOREIGN KEY (`original_language_id`) REFERENCES `language` (`language_id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1003 DEFAULT CHARSET=utf8;
 
-
-
 -- We have just one item for each film, and all will be placed in the new table. 
 -- For 2020, the rental duration will be 3 days, with an offer price of `2.99€` and a replacement cost of `8.99€`
 	-- (these are all fixed values for all movies for this year). 
 -- The catalog is in a CSV file named **films_2020.csv** that can be found at `files_for_lab` folder.
 
 
--- 1. Add the new films to the database.
--- 2. Update information on `rental_duration`, `rental_rate`, and `replacement_cost`.
-	-- ### Hint
-	-- You might have to use the following commands to set bulk import option to `ON`:
+-- 1. Add the new films to the database
 
-		show variables like 'local_infile';
-		set global local_infile = 1;
+SET AUTOCOMMIT = 0; 
+SET UNIQUE_CHECKS=0; 
+SET FOREIGN_KEY_CHECKS=0;
+INSERT INTO films_2020 (title, description, release_year, language_id, length, rating) SELECT title, description, release_year, language_id, length, rating FROM films_2020_old; 
+SET FOREIGN_KEY_CHECKS=1; 
+SET UNIQUE_CHECKS=1; 
+COMMIT; 
+SET AUTOCOMMIT = 1;
+
+drop table if exists films_2020_old; 
+
+-- 2. Update information on `rental_duration`, `rental_rate`, and `replacement_cost`.
+
+SET SQL_SAFE_UPDATES = 0;
+
+update films_2020
+set rental_duration = 3, rental_rate = 2.99, replacement_cost = 8.99;
+
+select *
+from films_2020
+limit 10;	
+  
+-- You might have to use the following commands to set bulk import option to `ON`:
+show variables like 'local_infile';
+set global local_infile = 1;
 
 -- If bulk import gives an unexpected error, you can also use the `data_import_wizard` to insert data into the new table.
+
