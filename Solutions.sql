@@ -17,10 +17,9 @@ CREATE TABLE `films_2020` (
   `length` smallint(5) unsigned DEFAULT NULL,
   `replacement_cost` decimal(5,2) DEFAULT NULL,
   `rating` enum('G','PG','PG-13','R','NC-17') DEFAULT NULL,
-  PRIMARY KEY (`film_id`),
-  CONSTRAINT FOREIGN KEY (`original_language_id`) REFERENCES `language` (`language_id`) ON DELETE RESTRICT ON UPDATE CASCADE
+  PRIMARY KEY (`film_id`)
+--  CONSTRAINT FOREIGN KEY (`original_language_id`) REFERENCES `language` (`language_id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1003 DEFAULT CHARSET=utf8;
-
 
 
 -- We have just one item for each film, and all will be placed in the new table. 
@@ -37,4 +36,24 @@ CREATE TABLE `films_2020` (
 		show variables like 'local_infile';
 		set global local_infile = 1;
 
+UPDATE films_2020
+SET rental_duration = 3
+WHERE rental_duration = '';
+ 
+UPDATE films_2020
+SET rental_rate = 2.99
+WHERE rental_rate = '';
+
+UPDATE films_2020
+SET replacement_cost = 8.99
+WHERE replacement_cost = '';
+
 -- If bulk import gives an unexpected error, you can also use the `data_import_wizard` to insert data into the new table.
+
+LOAD DATA INFILE '/Users/spicasumampouw/IronSpica/lab/Unit_2/lab-sql-6/files_for_lab/films_2020.csv'
+INTO TABLE films_2020
+COLUMNS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"'
+ESCAPED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES;
