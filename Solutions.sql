@@ -30,6 +30,14 @@ CREATE TABLE `films_2020` (
 
 
 -- 1. Add the new films to the database.
+
+-- Here I'm gotting this error message: Error Code: 1290. The MySQL server is running with the 
+-- -secure-file-priv option so it cannot execute this statement
+
+LOAD DATA INFILE 'C:\Users\claud\lab-sql-6\files_for_lab\films_2020.csv' 
+INTO TABLE films_2020 
+FIELDS TERMINATED BY ',';
+
 -- 2. Update information on `rental_duration`, `rental_rate`, and `replacement_cost`.
 	-- ### Hint
 	-- You might have to use the following commands to set bulk import option to `ON`:
@@ -38,3 +46,6 @@ CREATE TABLE `films_2020` (
 		set global local_infile = 1;
 
 -- If bulk import gives an unexpected error, you can also use the `data_import_wizard` to insert data into the new table.
+
+UPDATE films_2020
+set rental_duration = 3, rental_rate = 2.99, replacement_cost = 8.99;
